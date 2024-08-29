@@ -14,9 +14,6 @@ class MainController
         return view('main');
     }
 
-    /**
-     * @throws Exception
-     */
     public function createLead(LeadRequest $request)
     {
         $validated = $request->validated();

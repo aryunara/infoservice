@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,5 +29,9 @@ Route::post('main', [MainController::class, 'createLead'])->name('lead.create');
 Route::get('main-board', [MainController::class, 'getBoard'])->name('main.board');
 
 Route::get('leads', [LeadController::class, 'getLeads'])->name('leads')->middleware('auth');
-Route::get('profile', [LeadController::class, 'getProfile'])->name('profile')->middleware('auth');;
+//Остальные роуты для Lead страницы в routes/api.php
+
+Route::get('profile', [ProfileController::class, 'getProfile'])->name('profile')->middleware('auth');
+Route::post('profile', [ProfileController::class, 'update'])->name('update.profile');
+Route::get('profile-board', [ProfileController::class, 'getBoard'])->name('main.board');
 
