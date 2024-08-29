@@ -31,13 +31,43 @@
                                 <tbody>
                                 <tr v-for="lead in orderedLeads" :key="lead.id">
                                     <td>{{ lead.id }}</td>
-                                    <td>{{ lead.name }}</td>
-                                    <td>{{ lead.surname }}</td>
-                                    <td>{{ lead.email }}</td>
-                                    <td>{{ lead.phone }}</td>
-                                    <td>{{ new Date(lead.created_at).toLocaleDateString('ru-RU',
+                                    <td>
+                                        <input
+                                            type="text"
+                                            v-model="lead.name"
+                                            @input="markAsChanged"
+                                            class="form-control"
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            v-model="lead.surname"
+                                            @input="markAsChanged"
+                                            class="form-control"
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="email"
+                                            v-model="lead.email"
+                                            @input="markAsChanged"
+                                            class="form-control"
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="tel"
+                                            v-model="lead.phone"
+                                            @input="markAsChanged"
+                                            class="form-control"
+                                        />
+                                    </td>
+                                    <td>
+                                        {{ new Date(lead.created_at).toLocaleDateString('ru-RU',
                                         { day: '2-digit', month: '2-digit', year: 'numeric' }
-                                    ) }}</td>
+                                    ) }}
+                                    </td>
                                     <td>
                                         <select
                                             class="form-control status-dropdown"
@@ -57,9 +87,13 @@
                             </table>
 
                             <div class="d-grid mx-auto mt-3">
-                                <form @submit.prevent="saveChanges">
-                                    <button type="submit" class="btn btn-primary btn-block">Сохранить изменения</button>
-                                </form>
+                                <button
+                                    @click="saveChanges"
+                                    class="btn btn-save" style="background-color: #006699; color: white;"
+                                    :disabled="!changesMade"
+                                >
+                                    Сохранить изменения
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -86,6 +120,7 @@ export default {
         return {
             localLeads: [...this.leads],
             leadsCountInStatuses: {},
+            changesMade: false, // Флаг для отслеживания изменений
         };
     },
     computed: {
@@ -97,6 +132,9 @@ export default {
         }
     },
     methods: {
+        markAsChanged() {
+            this.changesMade = true; // Устанавливаем флаг изменений при редактировании
+        },
         updateStatus(leadId, newStatusId) {
             axios.post('api/updateStatus/' + leadId + '/' + newStatusId)
                 .then(response => {
@@ -142,6 +180,26 @@ export default {
                 });
         },
         saveChanges() {
+            const updates = this.localLeads.map((lead) => ({
+                id: lead.id,
+                name: lead.name,
+                surname: lead.surname,
+                email: lead.email,
+                phone: lead.phone
+            }));
+
+            axios.post('api/updateLeads', updates)
+                .then(response => {
+                    if (response.data.success) {
+                        this.changesMade = false;
+                        this.updateLeadsCountInStatuses();
+                    } else {
+                        console.error(response.data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error while saving changes", error);
+                });
         }
     },
     created() {
@@ -150,8 +208,20 @@ export default {
 }
 </script>
 
-
-
 <style>
+.card {
+    width: 1400px;
+}
+.table {
+    width: 100%; /* Делает таблицу шире */
+}
 
+.table th, .table td {
+    overflow: hidden; /* Скрывает переполнение */
+    text-overflow: ellipsis; /* Добавляет многоточие для длинных текстов */
+    white-space: nowrap; /* Запрещает перенос строк */
+}
+.btn-save {
+    width: 200px;
+}
 </style>

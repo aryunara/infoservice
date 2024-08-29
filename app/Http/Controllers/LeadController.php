@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LeadUpdateRequest;
 use App\Models\Lead;
 use App\Models\LeadStatus;
 use Illuminate\Http\Request;
@@ -60,10 +61,23 @@ class LeadController extends Controller
 
     public function updateLeads(Request $request)
     {
-        // Обработка сохранения изменений всех лидов
-        // Обновите логику по мере необходимости
+        $leads = $request->input();
 
-        return redirect()->back()->withSuccess('Изменения сохранены.');
+        foreach ($leads as $leadData) {
+            $lead = Lead::find($leadData['id']);
+
+            if (!$lead) {
+                return response()->json(['success' => false]);
+            }
+
+            $lead->name = $leadData['name'];
+            $lead->surname = $leadData['surname'];
+            $lead->email = $leadData['email'];
+            $lead->phone = $leadData['phone'];
+            $lead->save();
+        }
+
+        return response()->json(['success' => true]);
     }
 
 }

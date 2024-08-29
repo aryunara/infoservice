@@ -28,5 +28,5 @@ Route::post('main', [MainController::class, 'createLead'])->name('lead.create');
 Route::get('main-board', [MainController::class, 'getBoard'])->name('main.board');
 
 Route::get('leads', [LeadController::class, 'getLeads'])->name('leads')->middleware('auth');
-Route::get('profile', [LeadController::class, 'getProfile'])->name('profile');
+Route::get('profile', [LeadController::class, 'getProfile'])->name('profile')->middleware('auth');;
 
