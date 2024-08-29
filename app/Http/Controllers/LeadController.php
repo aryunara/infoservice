@@ -44,7 +44,7 @@ class LeadController extends Controller
         return response()->json(['success' => false, 'message' => 'Status not updated.']);
     }
 
-    public function delete($leadId)
+    public function delete(int $leadId)
     {
         $lead = Lead::find($leadId);
 

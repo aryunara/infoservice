@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistrationRequest;
+use App\Jobs\SendTextJob;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -43,11 +45,14 @@ class AuthController extends Controller
     {
         $validated = $request->validated();
 
-        User::create([
+        $user = User::create([
             'username' => $validated['username'],
             'email' => $validated['email'],
-            'password' => Hash::make($validated['password'])
+            'password' => Hash::make($validated['password']),
+            'email_verification_token' => Str::random(32),
         ]);
+
+        SendTextJob::dispatch($user['id'])->onQueue('sendText');
 
         return redirect("register-board")->withSuccess('You have registered.');
     }

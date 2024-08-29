@@ -38,30 +38,28 @@
                 </div>
             </div>
 
-{{--            <div class="row justify-content-center" style="margin-top: 30px">--}}
-{{--                <div class="col-md-8">--}}
-{{--                    <div class="card">--}}
-{{--                        <div class="card-header">--}}
-{{--                            <h3 class="text-center">Подтверждение почты</h3>--}}
-{{--                        </div>--}}
-{{--                        <div class="card-body">--}}
-{{--                            <form method="POST" action="{{ route('send') }}">--}}
-{{--                                @csrf--}}
-
-{{--                                <div class="form-group">--}}
-{{--                                    <label for="email"><strong>Введите адрес электронной почты, на него придет письмо с подтверждением регистрации</strong></label>--}}
-{{--                                    <input type="email" class="form-control" name="email" value="{{ old('email', $user->email) }}" style="margin-top: 10px" required>--}}
-{{--                                    @error('email')--}}
-{{--                                    <div class="text-danger">{{ $message }}</div>--}}
-{{--                                    @enderror--}}
-{{--                                </div>--}}
-
-{{--                                <button type="submit" class="btn btn-primary mt-3">Отправить</button>--}}
-{{--                            </form>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
+            <div class="row justify-content-center" style="margin-top: 30px">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="text-center">Подтверждение почты</h3>
+                        </div>
+                        <div class="card-body">
+                            <strong>Ваша электронная почта:</strong> {{ Auth::user()->email }}
+                            <br>
+                            @if(empty(Auth::user()->email_verified_at))
+                                <strong>Статус верификации:</strong> почта не подтверждена.
+                                <br><br>
+                                <strong>Нажмите на кнопку ниже, чтобы повторно отправить письмо на Вашу электронную почту.</strong>
+                                <br>
+                                <a href="{{ route('confirm.email') }}"><button type="submit" class="btn btn-primary mt-3" style="background-color: #006699">Отправить</button></a>
+                            @else
+                                <strong>Статус верификации:</strong> почта подтверждена.
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </main>

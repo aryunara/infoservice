@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PasswordChangeRequest;
+use App\Http\Requests\SendRequest;
+use App\Jobs\SendTextJob;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -38,9 +41,36 @@ class ProfileController extends Controller
         return redirect('profile-board')->withSuccess('Пароль обновлен успешно.');
     }
 
-    public function getBoard()
+    public function sendConfirmationLetter()
+    {
+        SendTextJob::dispatch(Auth::id())->onQueue('sendText');
+
+        return redirect("confirmation-board")->withSuccess('Письмо было отправлено успешно.');
+    }
+
+    public function verifyEmail(string $token)
+    {
+        $user = User::where('email_verification_token', $token)->first();
+
+        if ($user) {
+            $user->email_verified_at = now();
+            $user->email_verification_token = null;
+            $user->save();
+
+            return redirect('profile')->withSuccess('Email successfully verified!');
+        }
+
+        return redirect('register')->with('Invalid verification link.');
+    }
+
+    public function getProfileBoard()
     {
         return view('profile_board');
+    }
+
+    public function getConfirmationBoard()
+    {
+        return view('confirmation_board');
     }
 
 }

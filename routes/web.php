@@ -33,5 +33,8 @@ Route::get('leads', [LeadController::class, 'getLeads'])->name('leads')->middlew
 
 Route::get('profile', [ProfileController::class, 'getProfile'])->name('profile')->middleware('auth');
 Route::post('profile', [ProfileController::class, 'update'])->name('update.profile');
-Route::get('profile-board', [ProfileController::class, 'getBoard'])->name('main.board');
+Route::get('profile-board', [ProfileController::class, 'getProfileBoard'])->name('profile.board');
 
+Route::get('verifyEmail/{token}', [ProfileController::class, 'verifyEmail'])->name('verify.email');
+Route::get('sendConfirmationLetter', [ProfileController::class, 'sendConfirmationLetter'])->name('confirm.email');
+Route::get('confirmation-board', [ProfileController::class, 'getConfirmationBoard'])->name('confirmation.board');
