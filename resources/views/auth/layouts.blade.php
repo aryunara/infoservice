@@ -23,6 +23,9 @@
                     </li>
                 @else
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('profile') }}">Профиль</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('signout') }}">Выйти</a>
                     </li>
                 @endguest

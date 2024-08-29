@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,9 +21,12 @@ Route::post('custom-login', [AuthController::class, 'customLogin'])->name('login
 Route::get('register', [AuthController::class, 'registration'])->name('register');
 Route::post('custom-registration', [AuthController::class, 'customRegistration'])->name('register.custom');
 Route::get('register-board', [AuthController::class, 'getBoard'])->name('register.board');
-
 Route::get('signout', [AuthController::class, 'signOut'])->name('signout');
 
 Route::get('main', [MainController::class, 'getMain'])->name('main');
 Route::post('main', [MainController::class, 'createLead'])->name('lead.create');
 Route::get('main-board', [MainController::class, 'getBoard'])->name('main.board');
+
+Route::get('leads', [LeadController::class, 'getLeads'])->name('leads')->middleware('auth');
+Route::get('profile', [LeadController::class, 'getProfile'])->name('profile');
+

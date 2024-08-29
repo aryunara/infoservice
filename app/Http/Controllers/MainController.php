@@ -6,7 +6,6 @@ use App\Http\Requests\LeadRequest;
 use App\Models\Lead;
 use App\Models\LeadStatus;
 use Exception;
-use PHPUnit\Event\Code\Throwable;
 
 class MainController
 {

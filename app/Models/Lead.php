@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Lead extends Model
 {
@@ -34,8 +34,8 @@ class Lead extends Model
         'updated_at' => 'datetime',
     ];
 
-    public function status(): HasOne
+    public function status(): BelongsTo
     {
-        return $this->hasOne(LeadStatus::class);
+        return $this->belongsTo(LeadStatus::class, 'status_id');
     }
 }
