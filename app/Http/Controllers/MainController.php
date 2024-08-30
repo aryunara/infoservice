@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LeadRequest;
 use App\Models\Lead;
 use App\Models\LeadStatus;
-use Exception;
 
 class MainController
 {

@@ -18,9 +18,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('login', [AuthController::class, 'login'])->name('login');
-Route::post('custom-login', [AuthController::class, 'customLogin'])->name('login.custom');
+Route::post('login', [AuthController::class, 'postLogin'])->name('post.login');
 Route::get('register', [AuthController::class, 'registration'])->name('register');
-Route::post('custom-registration', [AuthController::class, 'customRegistration'])->name('register.custom');
+Route::post('register', [AuthController::class, 'postRegistration'])->name('post.register');
 Route::get('register-board', [AuthController::class, 'getBoard'])->name('register.board');
 Route::get('signout', [AuthController::class, 'signOut'])->name('signout');
 
@@ -32,9 +32,9 @@ Route::get('leads', [LeadController::class, 'getLeads'])->name('leads')->middlew
 //Остальные роуты для Lead страницы в routes/api.php
 
 Route::get('profile', [ProfileController::class, 'getProfile'])->name('profile')->middleware('auth');
-Route::post('profile', [ProfileController::class, 'update'])->name('update.profile');
-Route::get('profile-board', [ProfileController::class, 'getProfileBoard'])->name('profile.board');
+Route::post('profile', [ProfileController::class, 'update'])->name('update.profile')->middleware('auth');;
+Route::get('profile-board', [ProfileController::class, 'getProfileBoard'])->name('profile.board')->middleware('auth');;
 
 Route::get('verifyEmail/{token}', [ProfileController::class, 'verifyEmail'])->name('verify.email');
 Route::get('sendConfirmationLetter', [ProfileController::class, 'sendConfirmationLetter'])->name('confirm.email');
-Route::get('confirmation-board', [ProfileController::class, 'getConfirmationBoard'])->name('confirmation.board');
+Route::get('confirmation-board', [ProfileController::class, 'getConfirmationBoard'])->name('confirmation.board')->middleware('auth');;

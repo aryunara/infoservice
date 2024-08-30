@@ -8,8 +8,9 @@
                     <div class="card">
                         <h3 class="card-header text-center">Вход</h3>
                         <div class="card-body">
-                            <form method="POST" action="{{ route('login.custom') }}">
+                            <form method="POST" action="{{ route('post.login') }}">
                                 @csrf
+
                                 <div class="form-group mb-3">
                                     <input type="text" placeholder="Электронная почта" id="email" class="form-control" name="email"
                                            required autofocus>
@@ -17,6 +18,7 @@
                                         <span class="text-danger">{{ $errors->first('email') }}</span>
                                     @endif
                                 </div>
+
                                 <div class="form-group mb-3">
                                     <input type="password" placeholder="Пароль" id="password" class="form-control"
                                            name="password" required>

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PasswordChangeRequest;
-use App\Http\Requests\SendRequest;
 use App\Jobs\SendTextJob;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -50,17 +52,26 @@ class ProfileController extends Controller
 
     public function verifyEmail(string $token)
     {
-        $user = User::where('email_verification_token', $token)->first();
+        try {
+            DB::transaction(function () use ($token) {
+                $user = User::where('email_verification_token', $token)->first();
 
-        if ($user) {
-            $user->email_verified_at = now();
-            $user->email_verification_token = null;
-            $user->save();
+                if ($user) {
+                    $user->email_verified_at = now();
+                    $user->email_verification_token = null;
+                    $user->save();
 
-            return redirect('profile')->withSuccess('Email successfully verified!');
+                } else {
+                    throw new Exception('Некорректная ссылка.');
+                }
+            });
+
+            return redirect('profile')->withSuccess('Подтверждение прошло успешно.');
+        } catch (Exception $e) {
+            Log::error('Email verification failed: ' . $e->getMessage());
+
+            return redirect('register')->withErrors(['Некорректная ссылка.']);
         }
-
-        return redirect('register')->with('Invalid verification link.');
     }
 
     public function getProfileBoard()

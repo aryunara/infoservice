@@ -10,6 +10,7 @@
                         <div class="card-body">
                             <form method="POST" action="{{ route('main') }}">
                                 @csrf
+
                                 <div class="form-group mb-3">
                                     <input type="text" placeholder="Имя" id="name" class="form-control" name="name"
                                            required autofocus>
@@ -17,6 +18,7 @@
                                         <span class="text-danger">{{ $errors->first('name') }}</span>
                                     @endif
                                 </div>
+
                                 <div class="form-group mb-3">
                                     <input type="text" placeholder="Фамилия" id="surname" class="form-control"
                                            name="surname" required>
@@ -24,6 +26,7 @@
                                         <span class="text-danger">{{ $errors->first('surname') }}</span>
                                     @endif
                                 </div>
+
                                 <div class="form-group mb-3">
                                     <input type="tel" placeholder="Номер телефона" id="phone" class="form-control"
                                            name="phone" required>
@@ -31,6 +34,7 @@
                                         <span class="text-danger">{{ $errors->first('phone') }}</span>
                                     @endif
                                 </div>
+
                                 <div class="form-group mb-3">
                                     <input type="email" placeholder="Электронная почта" id="email" class="form-control"
                                            name="email" required>
@@ -38,6 +42,7 @@
                                         <span class="text-danger">{{ $errors->first('email') }}</span>
                                     @endif
                                 </div>
+
                                 <div class="form-group mb-3">
                                     <textarea placeholder="Текст обращения" rows="5" id="text" class="form-control"
                                               name="text" required></textarea>

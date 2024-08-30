@@ -16,12 +16,18 @@
             <ul class="navbar-nav">
                 @guest
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('main') }}">Главная</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">Войти</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('register') }}">Зарегистрироваться</a>
                     </li>
                 @else
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('main') }}">Главная</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('leads') }}">Лиды</a>
                     </li>

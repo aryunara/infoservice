@@ -8,8 +8,9 @@
                     <div class="card">
                         <h3 class="card-header text-center">Регистрация</h3>
                         <div class="card-body">
-                            <form action="{{ route('register.custom') }}" method="POST">
+                            <form action="{{ route('post.register') }}" method="POST">
                                 @csrf
+
                                 <div class="form-group mb-3">
                                     <input type="text" placeholder="Имя пользователя" id="username" class="form-control" name="username"
                                            required autofocus>
@@ -17,6 +18,7 @@
                                         <span class="text-danger">{{ $errors->first('username') }}</span>
                                     @endif
                                 </div>
+
                                 <div class="form-group mb-3">
                                     <input type="text" placeholder="Электронная почта" id="email_address" class="form-control"
                                            name="email" required>
@@ -24,6 +26,7 @@
                                         <span class="text-danger">{{ $errors->first('email') }}</span>
                                     @endif
                                 </div>
+
                                 <div class="form-group mb-3">
                                     <input type="password" placeholder="Пароль" id="password" class="form-control"
                                            name="password" required>
@@ -39,6 +42,7 @@
                                 <div style="margin-top: 20px; margin-left: 153px">
                                     <p>Уже есть аккаунт? <a href="{{ route('login') }}">Войти</a></p>
                                 </div>
+
                             </form>
                         </div>
                     </div>

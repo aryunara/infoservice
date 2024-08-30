@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistrationRequest;
 use App\Jobs\SendTextJob;
+use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +21,7 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function customLogin(LoginRequest $request)
+    public function postLogin(LoginRequest $request)
     {
         $validated = $request->validated();
 
@@ -41,20 +44,28 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function customRegistration(RegistrationRequest $request)
+    public function postRegistration(RegistrationRequest $request)
     {
         $validated = $request->validated();
 
-        $user = User::create([
-            'username' => $validated['username'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'email_verification_token' => Str::random(32),
-        ]);
+        try {
+            DB::transaction(function () use ($validated) {
+                $user = User::create([
+                    'username' => $validated['username'],
+                    'email' => $validated['email'],
+                    'password' => Hash::make($validated['password']),
+                    'email_verification_token' => Str::random(32),
+                ]);
 
-        SendTextJob::dispatch($user['id'])->onQueue('sendText');
+                SendTextJob::dispatch($user['id'])->onQueue('sendText');
+            }, 2);
 
-        return redirect("register-board")->withSuccess('You have registered.');
+            return redirect("register-board")->withSuccess('Регистрация прошла успешно.');
+        } catch (Exception $exception) {
+            Log::error($exception->getMessage());
+
+            return redirect("register-board")->with('Во время регистрации возникла ошибка на сервере.');
+        }
     }
 
     public function getBoard()
@@ -67,6 +78,6 @@ class AuthController extends Controller
         Session::flush();
         Auth::logout();
 
-        return Redirect('login');
+        return redirect('login');
     }
 }
